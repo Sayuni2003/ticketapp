@@ -1,6 +1,7 @@
 import React from "react";
 import prisma from "@/prisma/db";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import options from "@/app/api/auth/[...nextauth]/option";
 import TicketStatusBadge from "@/components/TicketStatusBadge";
 import TicketPriority from "@/components/TicketPriority";
@@ -10,11 +11,7 @@ const MyTickets = async () => {
   const session = await getServerSession(options);
 
   if (!session || session.user?.role !== "TECH") {
-    return (
-      <p className="text-destructive">
-        Forbidden: Only technicians can view this page.
-      </p>
-    );
+    redirect("/");
   }
 
   const userId =

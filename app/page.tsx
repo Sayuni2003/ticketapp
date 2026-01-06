@@ -9,26 +9,8 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import bcrypt from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
 
 const Dashboard = async () => {
-  const prisma = new PrismaClient();
-
-  (async () => {
-    await prisma.user.create({
-      data: {
-        name: "Admin",
-        username: "admin",
-        password: await bcrypt.hash("admin123", 10),
-        role: "ADMIN",
-      },
-    });
-
-    console.log("Admin user created");
-    await prisma.$disconnect();
-  })();
-
   const tickets = await prisma.ticket.findMany({
     where: {
       NOT: [{ status: "CLOSED" }],
