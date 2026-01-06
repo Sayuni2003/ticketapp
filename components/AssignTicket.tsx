@@ -46,11 +46,13 @@ const AssignTicket = ({ ticket, users }: { ticket: Ticket; users: User[] }) => {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="0">Unassign</SelectItem>
-          {users?.map((user) => (
-            <SelectItem key={user.id} value={user.id.toString()}>
-              {user.name}
-            </SelectItem>
-          ))}
+          {users
+            ?.filter((u) => u.role === "TECH")
+            .map((user) => (
+              <SelectItem key={user.id} value={user.id.toString()}>
+                {user.name}
+              </SelectItem>
+            ))}
         </SelectContent>
       </Select>
       <p className="text-destructive">{error}</p>

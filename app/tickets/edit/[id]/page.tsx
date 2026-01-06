@@ -1,5 +1,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
+import { getServerSession } from "next-auth";
+import options from "@/app/api/auth/[...nextauth]/option";
 
 interface Props {
   params: { id: string };
@@ -18,7 +20,17 @@ const EditTicket = async ({ params }: Props) => {
     return <p className="text-destructive">Ticket not found!!</p>;
   }
 
-  return <TicketForm ticket={ticket} />;
+  const session = await getServerSession(options);
+
+  if (!session || session.user?.role !== "TECH") {
+    return (
+      <p className="text-destructive">
+        Forbidden: Only technicians can edit tickets.
+      </p>
+    );
+  }
+
+  return <TicketForm ticket={ticket} role={session.user.role} />;
 };
 
 export default EditTicket;

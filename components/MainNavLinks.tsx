@@ -8,6 +8,7 @@ const MainNavLinks = ({ role }: { role?: string }) => {
   const links = [
     { label: "Dashboard", href: "/", adminOnly: false },
     { label: "Tickets", href: "/tickets", adminOnly: false },
+    { label: "My Tickets", href: "/tickets/my", techOnly: true },
     { label: "Users", href: "/users", adminOnly: true },
   ];
 
@@ -16,7 +17,11 @@ const MainNavLinks = ({ role }: { role?: string }) => {
   return (
     <div className="flex items-center gap-2">
       {links
-        .filter((link) => !link.adminOnly || role === "ADMIN")
+        .filter((link) => {
+          if (link.adminOnly && role !== "ADMIN") return false;
+          if ((link as any).techOnly && role !== "TECH") return false;
+          return true;
+        })
         .map((link) => (
           <Link
             href={link.href}

@@ -19,9 +19,10 @@ import AssignTicket from "@/components/AssignTicket";
 interface Props {
   ticket: Ticket;
   users: User[];
+  role?: string | null;
 }
 
-const TicketDetails = ({ ticket, users }: Props) => {
+const TicketDetails = ({ ticket, users, role }: Props) => {
   return (
     <div className=" lg:grid lg:grid-cols-4">
       <Card className="mx-4 mb-4 lg:col-span-3 lg:mr-4">
@@ -42,6 +43,9 @@ const TicketDetails = ({ ticket, users }: Props) => {
               hour12: true,
             })}
           </CardDescription>
+          {ticket.assignedToUserId ? (
+            <div className="mt-2 text-sm text-primary">Assigned</div>
+          ) : null}
         </CardHeader>
         <CardContent className="prose dark:prose-invert">
           <ReactMarkDown>{ticket.description}</ReactMarkDown>
@@ -59,17 +63,21 @@ const TicketDetails = ({ ticket, users }: Props) => {
         </CardFooter>
       </Card>
       <div className="mx-4 flex lg:flex-col lg:mx-0 gap-2">
-        <AssignTicket ticket={ticket} users={users} />
-        <Link
-          href={`/tickets/edit/${ticket.id}`}
-          className={`${buttonVariants({
-            variant: "default",
-          })}`}
-        >
-          {" "}
-          Edit ticket
-        </Link>
-        <DeleteButton ticketId={ticket.id} />
+        {role === "ADMIN" ? (
+          <AssignTicket ticket={ticket} users={users} />
+        ) : null}
+        {role === "TECH" ? (
+          <Link
+            href={`/tickets/edit/${ticket.id}`}
+            className={`${buttonVariants({
+              variant: "default",
+            })}`}
+          >
+            {" "}
+            Edit ticket
+          </Link>
+        ) : null}
+        {role === "ADMIN" ? <DeleteButton ticketId={ticket.id} /> : null}
       </div>
     </div>
   );
