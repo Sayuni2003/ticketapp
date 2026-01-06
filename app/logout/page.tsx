@@ -2,18 +2,17 @@
 
 import { useState } from "react";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function LogoutPage() {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   async function handleLogout() {
     setLoading(true);
     await signOut({ redirect: false });
-    router.push("/");
+    // Force a full-page navigation so the server picks up the cleared session cookie
+    window.location.href = "/";
   }
 
   return (

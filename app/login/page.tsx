@@ -43,7 +43,9 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/");
+    // Perform a full-page navigation to ensure server components pick up
+    // the newly set session cookie immediately (reliable across environments).
+    window.location.href = "/";
   }
 
   return (
